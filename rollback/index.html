@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回滚网络码 · 近身动作对抗确定性演示</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --line: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --red: #ef4444;
+    --green: #22c55e; --amber: #f59e0b; --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px; background: var(--bg); color: var(--text);
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  h1 { font-size: 16px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin-bottom: 12px; }
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px; margin-bottom: 12px;
+  }
+  button, select {
+    background: #0b1220; color: var(--text); border: 1px solid var(--line);
+    border-radius: 6px; padding: 6px 10px; font: inherit; cursor: pointer;
+  }
+  button:hover { border-color: var(--blue); }
+  label { color: var(--muted); }
+  .arenas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .arena {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px;
+  }
+  .arena h2 { font-size: 13px; margin: 0 0 6px; }
+  canvas { width: 100%; background: #0b1220; border-radius: 6px; display: block; }
+  .status { color: var(--muted); margin-top: 6px; word-break: break-all; font-size: 12px; }
+  .meta {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 13px; }
+  #eventLog { max-height: 260px; overflow-y: auto; font-size: 12px; }
+  .logline { padding: 2px 0; border-bottom: 1px solid #1f2b3d; }
+  .logline.rollback { color: #fca5a5; }
+  .logline.rollback-hit { color: #f87171; font-weight: 700; }
+  .logline.resync { color: #fcd34d; font-weight: 700; }
+  .logline.hit { color: #86efac; }
+  .logline.blocked { color: #93c5fd; }
+  .logline.final { color: #67e8f9; font-weight: 700; }
+  .rules { color: var(--muted); font-size: 12px; }
+  .rules b { color: var(--text); }
+  .legend span { display: inline-block; margin-right: 12px; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; }
+  input[type="number"] {
+    width: 64px; background: #0b1220; color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; padding: 4px; font: inherit;
+  }
+</style>
+</head>
+<body>
+  <h1>回滚网络码演示 · 近身动作对抗（确定性固定步长模拟）</h1>
+  <div class="sub">
+    同一引擎同时运行两个对端；命中只由显式 AABB 命中盒/受击盒规则产生，画面接触不是判定依据。
+    迟到输入在快照窗口内回滚重演，超出窗口触发可解释的硬重同步。
+  </div>
+
+  <div class="bar">
+    <label>场景
+      <select id="scenarioSelect">
+        <option value="flip" selected>交错动作 · 迟到输入翻转命中</option>
+        <option value="baseline">接近与格挡 · 干净链路</option>
+        <option value="resync">超出快照窗口 · 硬重同步</option>
+        <option value="lossy">25% 丢包 · 可靠收敛</option>
+      </select>
+    </label>
+    <button id="btnPlay">播放</button>
+    <button id="btnStep">单步</button>
+    <button id="btnReset">重置</button>
+    <label>速度
+      <select id="speedSelect">
+        <option value="0.25">0.25×</option>
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+      </select>
+    </label>
+    <button id="btnHitboxes">隐藏命中盒</button>
+    <button id="btnInteractive">进入实时交互</button>
+    <label>交互窗口 <input id="windowSize" type="number" value="30" min="4" max="120"></label>
+    <label>延迟 <input id="latency" type="number" value="8" min="0" max="60"></label>
+    <label>抖动 <input id="jitter" type="number" value="2" min="0" max="10"></label>
+    <label>丢包% <input id="loss" type="number" value="10" min="0" max="90"></label>
+  </div>
+
+  <div class="arenas">
+    <div class="arena">
+      <h2>对端 1 视角（本地 P1 蓝，远端 P2 橙）— 红色闪屏表示该端刚发生回滚/重同步</h2>
+      <canvas id="canvas1" width="600" height="250"></canvas>
+      <div class="status" id="canvas1Status"></div>
+    </div>
+    <div class="arena">
+      <h2>对端 2 视角（本地 P2 橙，远端 P1 蓝）— 同一输入历史必须得到同一校验和</h2>
+      <canvas id="canvas2" width="600" height="250"></canvas>
+      <div class="status" id="canvas2Status"></div>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div class="card">
+      <h3>运行状态</h3>
+      <div id="modeLabel" class="status"></div>
+      <div class="status">逻辑时钟 t=<span id="clockLabel">0</span></div>
+      <div class="status" id="netLabel"></div>
+      <div class="status" id="refLabel"></div>
+      <div class="legend status" style="margin-top:8px">
+        <span><span class="swatch" style="background:#ef4444;opacity:.6"></span>命中盒(active)</span>
+        <span><span class="swatch" style="border:1px dashed #22c55e;background:transparent"></span>受击盒</span>
+        <span><span class="swatch" style="background:#facc15"></span>无敌帧</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>实时交互按键</h3>
+      <div class="rules">
+        <b>P1</b>：A/D 移动，W 跳，F 轻击，G 重击，S 格挡<br>
+        <b>P2</b>：←/→ 移动，↑ 跳，逗号轻击，句号重击，↓ 格挡<br>
+        预测规则：移动/格挡为持续输入，按最后观测值延续；跳跃与攻击是边沿输入，预测端绝不臆造。
+      </div>
+    </div>
+    <div class="card">
+      <h3>规则与确定性</h3>
+      <div class="rules">
+        整数定点物理 · 60Hz 固定步长 · mulberry32 PRNG 状态纳入快照。<br>
+        暴击只在真实命中时按固定玩家顺序掷骰；格挡不掷骰。<br>
+        快照环有界（窗口帧数），事件日志与回滚日志有界。<br>
+        链路丢包只重传不丢弃：输入捆绑最近 20 帧，迟到必达。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>事件 / 回滚 / 重同步日志（含发生回滚的模拟步与修正原因）</h3>
+    <div id="eventLog"></div>
+  </div>
+
+  <script src="lib/engine.js"></script>
+  <script src="lib/netcode.js"></script>
+  <script src="lib/scenarios.js"></script>
+  <script src="lib/app.js"></script>
+</body>
+</html>

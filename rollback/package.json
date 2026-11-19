@@ -1,0 +1,16 @@
+{
+  "name": "rollback-combat-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deterministic rollback netcode demo for close-range action combat",
+  "scripts": {
+    "verify": "node scripts/verify.js",
+    "smoke": "node scripts/browser-smoke.js",
+    "report": "node scripts/report.js",
+    "check": "node scripts/verify.js && node scripts/browser-smoke.js && node scripts/report.js",
+    "serve": "node -e \"const http=require('http'),fs=require('fs'),path=require('path');const root=__dirname;http.createServer((q,s)=>{let p=path.join(root,q.url==='/'?'index.html':q.url.split('?')[0]);fs.readFile(p,(e,d)=>{if(e){s.writeHead(404);return s.end('404');}const t=p.endsWith('.js')?'text/javascript':p.endsWith('.html')?'text/html':'text/plain';s.writeHead(200,{'Content-Type':t});s.end(d);});}).listen(8080,()=>console.log('http://localhost:8080'));\""
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
