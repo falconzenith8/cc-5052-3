@@ -1,0 +1,31 @@
+{
+  "kind": "mask-experiment",
+  "schemaVersion": 1,
+  "maskedField": "particles",
+  "registryClass": "render-only",
+  "expectDeterministicBreak": false,
+  "observedDeterministicBreak": false,
+  "firstMismatch": {
+    "frame": 6,
+    "entity": "player:1",
+    "field": "particles",
+    "registryClass": "render-only",
+    "affectsGameplay": false,
+    "valueNoRollback": 2,
+    "valueRollback": 0
+  },
+  "firstConsequentialMismatch": null,
+  "framesWithMismatch": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "mismatchWindow": [
+    6,
+    12
+  ]
+}

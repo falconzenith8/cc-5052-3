@@ -1,0 +1,25 @@
+{
+  "kind": "mask-experiment",
+  "schemaVersion": 1,
+  "maskedField": "hitEligible",
+  "registryClass": "derived-cache",
+  "expectDeterministicBreak": false,
+  "observedDeterministicBreak": false,
+  "firstMismatch": {
+    "frame": 6,
+    "entity": "player:1",
+    "field": "hitEligible",
+    "registryClass": "derived-cache",
+    "affectsGameplay": false,
+    "valueNoRollback": false,
+    "valueRollback": true
+  },
+  "firstConsequentialMismatch": null,
+  "framesWithMismatch": [
+    6
+  ],
+  "mismatchWindow": [
+    6,
+    6
+  ]
+}

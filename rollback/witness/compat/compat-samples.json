@@ -1,0 +1,75 @@
+{
+  "kind": "compatibility-samples",
+  "schemaVersion": 1,
+  "engine": {
+    "cooldownFull": 6,
+    "cooldownCancelRefund": 2
+  },
+  "scenario": {
+    "seed": 777,
+    "windowFrames": 30,
+    "positions": {
+      "p1x": 120,
+      "p2x": 400
+    },
+    "attackFrame": 2,
+    "cancelFrame": 5,
+    "samePictureFrame": 15,
+    "retriggerFrame": 18,
+    "lastFrame": 30,
+    "deliverClock": 8,
+    "maskSnapshotFrame": 6,
+    "maskGateFrame": 7
+  },
+  "headToHead": {
+    "firstConsequentialMismatch": {
+      "frame": 5,
+      "entity": "player:1",
+      "field": "cooldown",
+      "registryClass": "authoritative",
+      "affectsGameplay": true,
+      "valueNoRollback": 3,
+      "valueRollback": 4
+    },
+    "samePictureFrame": 15,
+    "samePictureVisualEqual": true
+  },
+  "expectedByField": {
+    "particles": {
+      "registryClass": "render-only",
+      "deterministicBreak": false,
+      "firstMismatch": {
+        "frame": 6,
+        "entity": "player:1",
+        "field": "particles"
+      }
+    },
+    "hitEligible": {
+      "registryClass": "derived-cache",
+      "deterministicBreak": false,
+      "firstMismatch": {
+        "frame": 6,
+        "entity": "player:1",
+        "field": "hitEligible"
+      }
+    },
+    "cooldown": {
+      "registryClass": "authoritative",
+      "deterministicBreak": true,
+      "firstMismatch": {
+        "frame": 6,
+        "entity": "player:1",
+        "field": "cooldown"
+      }
+    },
+    "rngState": {
+      "registryClass": "rng-cursor",
+      "deterministicBreak": true,
+      "firstMismatch": {
+        "frame": 5,
+        "entity": "world",
+        "field": "rngState"
+      }
+    }
+  }
+}

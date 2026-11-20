@@ -1,0 +1,1042 @@
+{
+  "kind": "shortest-divergence-trajectory",
+  "schemaVersion": 1,
+  "generatedFrom": "witness/scenario.js runWitness().headToHead",
+  "seed": 777,
+  "locatedFirstMismatch": {
+    "frame": 5,
+    "entity": "player:1",
+    "field": "cooldown",
+    "registryClass": "authoritative",
+    "affectsGameplay": true,
+    "valueNoRollback": 3,
+    "valueRollback": 4
+  },
+  "frameRange": [
+    5,
+    18
+  ],
+  "samePictureFrame": 15,
+  "inputLog": {
+    "p1": [
+      0,
+      0,
+      8,
+      0,
+      0,
+      8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "p2": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "frames": [
+    {
+      "frame": 5,
+      "noRollback": {
+        "frame": 5,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 4,
+            "hp": 100,
+            "cooldown": 3,
+            "hitEligible": false,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 5,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 4,
+            "hitEligible": false,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 6,
+      "noRollback": {
+        "frame": 6,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 5,
+            "hp": 100,
+            "cooldown": 2,
+            "hitEligible": false,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 6,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 3,
+            "hitEligible": false,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 7,
+      "noRollback": {
+        "frame": 7,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 6,
+            "hp": 100,
+            "cooldown": 1,
+            "hitEligible": false,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 7,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 2,
+            "hitEligible": false,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 8,
+      "noRollback": {
+        "frame": 8,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 7,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 8,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 1,
+            "hitEligible": false,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 9,
+      "noRollback": {
+        "frame": 9,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 8,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 9,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 10,
+      "noRollback": {
+        "frame": 10,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 9,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 10,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 11,
+      "noRollback": {
+        "frame": 11,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 10,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 11,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 12,
+      "noRollback": {
+        "frame": 12,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 11,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 12,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 13,
+      "noRollback": {
+        "frame": 13,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 12,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 13,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 14,
+      "noRollback": {
+        "frame": 14,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 13,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": {
+              "swingId": 1,
+              "startTicket": 1831566590,
+              "rolled": true,
+              "crit": true
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 14,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": false
+    },
+    {
+      "frame": 15,
+      "noRollback": {
+        "frame": 15,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 15,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": true
+    },
+    {
+      "frame": 16,
+      "noRollback": {
+        "frame": 16,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 16,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": true
+    },
+    {
+      "frame": 17,
+      "noRollback": {
+        "frame": 17,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 1,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 17,
+        "rngState": 3663132403,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 2,
+            "pendingCritRoll": null
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": true
+    },
+    {
+      "frame": 18,
+      "noRollback": {
+        "frame": 18,
+        "rngState": 1199730920,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 1,
+            "hp": 100,
+            "cooldown": 6,
+            "hitEligible": false,
+            "particles": 2,
+            "pendingCritRoll": {
+              "swingId": 2,
+              "startTicket": 1199730920
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "rollback": {
+        "frame": 18,
+        "rngState": 1199730920,
+        "players": [
+          {
+            "id": 1,
+            "x": 120,
+            "y": 0,
+            "action": "LIGHT",
+            "actionFrame": 1,
+            "hp": 100,
+            "cooldown": 6,
+            "hitEligible": false,
+            "particles": 3,
+            "pendingCritRoll": {
+              "swingId": 2,
+              "startTicket": 1199730920
+            }
+          },
+          {
+            "id": 2,
+            "x": 400,
+            "y": 0,
+            "action": "IDLE",
+            "actionFrame": 0,
+            "hp": 100,
+            "cooldown": 0,
+            "hitEligible": true,
+            "particles": 0,
+            "pendingCritRoll": null
+          }
+        ]
+      },
+      "visualEqual": true
+    }
+  ]
+}

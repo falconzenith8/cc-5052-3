@@ -18,6 +18,11 @@
   const GROUND_FRICTION = 1;
   const MAX_HP = 100;
   const POST_HIT_INVULN = 10; // frames of full invulnerability after a clean hit
+  // Cooldown gate for re-triggering an attack. A swing that runs to completion
+  // grants the full cooldown; interrupting it early (cancel) refunds most of it,
+  // so the next attack edge is eligible sooner. This counter is authoritative.
+  const ATTACK_COOLDOWN_FULL = 6;
+  const ATTACK_COOLDOWN_CANCEL_REFUND = 2;
 
   // ---------- input bitmask ----------
   const INPUT = {
@@ -85,6 +90,12 @@
       swingId: 0,
       didHitThisSwing: false,
       inputPrev: 0,
+      // Witness-layer fields. Registered in witness/field-registry.json; their
+      // serialization class drives the rollback masking experiments.
+      cooldown: 0,          // authoritative: frames before the next attack edge
+      hitEligible: true,    // derived cache: cooldown === 0 (recomputed each step)
+      particles: 0,         // render-only: cosmetic particle counter, never read by sim
+      pendingCritRoll: null, // RNG effect deferred: {swingId} waits until active frames
     };
   }
 
@@ -136,11 +147,22 @@
   function step(state, inputs) {
     state.frame += 1;
 
+    for (const p of state.players) {
+      if (p.cooldown > 0) p.cooldown -= 1;
+      // Derived cache: deliberately recomputed from the authoritative cooldown.
+      // Dropping it from snapshots is harmless; dropping cooldown is not.
+      p.hitEligible = p.cooldown === 0;
+    }
+
     for (let i = 0; i < 2; i++) {
       controlPlayer(state, state.players[i], state.players[1 - i], inputs[i]);
     }
     for (let i = 0; i < 2; i++) integrate(state.players[i]);
     for (let i = 0; i < 2; i++) advanceAction(state.players[i]);
+    // The deciding RNG ticket is consumed on entering the active phase, whether
+    // or not the swing later connects, so the cursor advances deterministically
+    // per swing and never depends on hitbox overlap.
+    for (const p of state.players) resolveSwingTicket(state, p);
     resolveHits(state);
 
     for (const p of state.players) {
@@ -160,6 +182,26 @@
 
     const stunned = p.action === 'HITSTUN' || p.action === 'BLOCKSTUN';
     const attacking = p.action === 'LIGHT' || p.action === 'HEAVY';
+    const attackEdge = edge(input, prev, INPUT.LIGHT) || edge(input, prev, INPUT.HEAVY);
+
+    if (!stunned && attacking && attackEdge) {
+      // Interrupt-and-retrigger fiction: cancel the current swing early.
+      // Both worlds render the same IDLE body on the cancel frame, but the
+      // shortened cooldown changes next-beat hit eligibility (see witness).
+      p.particles += 1; // cosmetic cancel puff only; never read by the sim
+      // Second RNG ticket of this swing: a completed swing draws its deciding
+      // ticket at the active frame; an interrupted swing draws it here instead.
+      // Both paths consume exactly two tickets, so the cursor stays aligned.
+      const cancelRoll = rngNext(state.rngState);
+      state.rngState = cancelRoll.state;
+      p.action = 'IDLE';
+      p.actionFrame = 0;
+      p.didHitThisSwing = false;
+      p.pendingCritRoll = null;
+      p.cooldown = ATTACK_COOLDOWN_FULL - ATTACK_COOLDOWN_CANCEL_REFUND;
+      p.hitEligible = false;
+      return;
+    }
 
     if (!stunned && !attacking) {
       // Rule: always face the opponent while free to act; facing locks during attacks/stuns.
@@ -178,6 +220,9 @@
           p.vy = -JUMP_VY;
           p.onGround = false;
         }
+        // Authoritative cooldown gate: an edge while cooling down is consumed
+        // without starting a swing, so the two worlds silently diverge on it.
+        if (p.cooldown > 0) return;
         if (edge(input, prev, INPUT.HEAVY)) startAttack(state, p, 'HEAVY');
         else if (edge(input, prev, INPUT.LIGHT)) startAttack(state, p, 'LIGHT');
       }
@@ -192,6 +237,16 @@
     p.didHitThisSwing = false;
     state.eventSeq += 1;
     p.swingId = state.eventSeq;
+    p.cooldown = ATTACK_COOLDOWN_FULL;
+    p.hitEligible = false;
+    p.particles += 1; // cosmetic swing spark only; never read by the sim
+    // First RNG draw of the swing advances the cursor at start. The deciding
+    // crit draw happens at the active frame (tail of the rollback window); a
+    // cancel draws its second ticket at the interrupt event instead, so both
+    // "completed" and "cancelled" histories advance the cursor by two.
+    const startRoll = rngNext(state.rngState);
+    state.rngState = startRoll.state;
+    p.pendingCritRoll = { swingId: p.swingId, startTicket: startRoll.state };
   }
 
   function integrate(p) {
@@ -221,7 +276,27 @@
       p.actionFrame = 0;
       p.stunTotal = 0;
       p.didHitThisSwing = false;
+      p.pendingCritRoll = null;
     }
+  }
+
+  // Consume the second (deciding) RNG ticket exactly once per swing, on its
+  // first active frame — the tail of any rollback window containing the start.
+  // A cancelled swing instead draws this ticket at the interrupt event, so both
+  // histories advance the cursor by two tickets per swing.
+  function resolveSwingTicket(state, p) {
+    if (p.action !== 'LIGHT' && p.action !== 'HEAVY') return;
+    if (actionPhase(p) !== 'active') return;
+    if (!p.pendingCritRoll || p.pendingCritRoll.rolled) return;
+    const roll = rngNext(state.rngState);
+    state.rngState = roll.state;
+    const crit = roll.value * 100 < ACTIONS[p.action].critChance;
+    p.pendingCritRoll = {
+      swingId: p.swingId,
+      startTicket: p.pendingCritRoll.startTicket,
+      rolled: true,
+      crit,
+    };
   }
 
   // Explicit, rule-driven hit resolution: AABB hitbox vs hurtbox overlap only.
@@ -233,22 +308,23 @@
       if (atk.action !== 'LIGHT' && atk.action !== 'HEAVY') continue;
       if (actionPhase(atk) !== 'active' || atk.didHitThisSwing) continue;
 
+      // The crit was decided by resolveSwingTicket at the active frame; here we
+      // only read the carried result and apply its numeric effect.
+      const data = ACTIONS[atk.action];
+      let crit = false;
+      if (atk.pendingCritRoll && atk.pendingCritRoll.swingId === atk.swingId) {
+        crit = atk.pendingCritRoll.crit === true;
+      }
+
       const hb = hitbox(atk);
       const hurt = hurtbox(def);
       if (!hb || !overlap(hb, hurt)) continue;
 
-      const data = ACTIONS[atk.action];
       const facingAttacker = Math.sign(atk.x - def.x) === def.facing;
       const blocked = def.blocking && facingAttacker && def.action === 'IDLE';
 
       let damage;
-      let crit = false;
       if (!blocked) {
-        // Randomness is drawn here, in fixed player order, so both peers with the
-        // same input history make the identical roll at the identical frame.
-        const roll = rngNext(state.rngState);
-        state.rngState = roll.state;
-        crit = roll.value * 100 < data.critChance;
         damage = crit ? Math.round(data.damage * 1.5) : data.damage;
       } else {
         damage = data.blockDamage;
@@ -285,6 +361,7 @@
         def.vx = atk.facing * (crit ? Math.round(data.knockback * 1.5) : data.knockback);
       }
       atk.didHitThisSwing = true;
+      atk.particles += 1; // cosmetic impact sparks only; never read by the sim
       ev.defenderHpAfter = def.hp;
       state.eventSeq += 1;
       ev.eventId = state.eventSeq;
@@ -338,6 +415,10 @@
         invuln: p.invuln,
         swingId: p.swingId,
         didHitThisSwing: p.didHitThisSwing,
+        cooldown: p.cooldown,
+        hitEligible: p.hitEligible,
+        particles: p.particles,
+        pendingCritRoll: p.pendingCritRoll,
       })),
       events: state.events.map((e) => ({
         frame: e.frame, type: e.type, hitId: e.hitId,
@@ -350,6 +431,7 @@
 
   const api = {
     STAGE_W, STAGE_H, PLAYER_W, PLAYER_H, MAX_HP,
+    ATTACK_COOLDOWN_FULL, ATTACK_COOLDOWN_CANCEL_REFUND,
     INPUT, HELD_MASK, EDGE_MASK, ACTIONS,
     createInitialState, step, actionPhase, hitbox, hurtbox,
     cloneState, checksum, summarize, stableStringify, rngNext,

@@ -1,0 +1,39 @@
+{
+  "kind": "mask-experiment",
+  "schemaVersion": 1,
+  "maskedField": "cooldown",
+  "registryClass": "authoritative",
+  "expectDeterministicBreak": true,
+  "observedDeterministicBreak": true,
+  "firstMismatch": {
+    "frame": 6,
+    "entity": "player:1",
+    "field": "cooldown",
+    "registryClass": "authoritative",
+    "affectsGameplay": true,
+    "valueNoRollback": 3,
+    "valueRollback": 0
+  },
+  "firstConsequentialMismatch": {
+    "frame": 6,
+    "entity": "player:1",
+    "field": "cooldown",
+    "registryClass": "authoritative",
+    "affectsGameplay": true,
+    "valueNoRollback": 3,
+    "valueRollback": 0
+  },
+  "framesWithMismatch": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "mismatchWindow": [
+    6,
+    12
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "description": "序列化字段登记。每个字段标注其确定性角色：authoritative 必须随快照保存且其失配会改变游戏结果；derived-cache 可从权威字段重新推导，遗漏只产生可自愈的瞬时分歧；render-only 与游戏结果无关，比较时忽略；rng-cursor 是权威随机状态，遗漏会让回滚区间末端的随机效果失配。",
+  "entities": {
+    "player": {
+      "cooldown": {
+        "class": "authoritative",
+        "type": "integer",
+        "default": 0,
+        "affectsGameplay": true,
+        "deriveFrom": null,
+        "note": "下一次攻击边沿的冷却计数（帧）。打断取消只退部分冷却，自然打满给完整冷却；该计数决定下一拍的命中资格。"
+      },
+      "hitEligible": {
+        "class": "derived-cache",
+        "type": "boolean",
+        "default": true,
+        "affectsGameplay": false,
+        "deriveFrom": ["cooldown"],
+        "deriveRule": "hitEligible = (cooldown === 0)，每帧 step 开头重算。",
+        "note": "可推导缓存：快照里丢掉后下一帧即由 cooldown 重新算出，最多造成一个帧的瞬时失配，不会改变命中。"
+      },
+      "particles": {
+        "class": "render-only",
+        "type": "integer",
+        "default": 0,
+        "affectsGameplay": false,
+        "deriveFrom": null,
+        "note": "纯渲染粒子计数（取消火花/挥击火花/命中火花）。模拟代码从不读取它；屏蔽后证据引擎不得报告确定性破坏。"
+      },
+      "pendingCritRoll": {
+        "class": "authoritative",
+        "type": "object|null",
+        "default": null,
+        "affectsGameplay": true,
+        "deriveFrom": null,
+        "note": "延迟暴击登记 {swingId, startTicket, rolled, crit}。起手时抽第一张 RNG 票并登记，活动帧（回滚区间末端）才抽第二张票并把暴击数值作用到伤害；在回滚窗口内必须随快照存活。"
+      }
+    },
+    "world": {
+      "rngState": {
+        "class": "rng-cursor",
+        "type": "uint32",
+        "default": "seed",
+        "affectsGameplay": true,
+        "deriveFrom": null,
+        "note": "mulberry32 随机游标。每段攻击抽两张票：起手抽第一张，活动帧（回滚区间末端）抽第二张并据此决定暴击；被取消的攻击在中断事件抽第二张票，两条路径游标推进次数一致。游标若未序列化，重演会从旧游标重抽第二张票，暴击与伤害确定失配。"
+      }
+    }
+  },
+  "maskExperiments": {
+    "particles": {
+      "expectDeterministicBreak": false,
+      "expectation": "渲染字段：屏蔽后该字段持续不同，但无任何权威字段分歧，工具判定为无破坏。"
+    },
+    "hitEligible": {
+      "expectDeterministicBreak": false,
+      "expectation": "可推导缓存：屏蔽后只在恢复首帧出现 hitEligible 失配，下一拍即自愈；无权威字段、无 hp/事件分歧。"
+    },
+    "cooldown": {
+      "expectDeterministicBreak": true,
+      "expectation": "权威计数：屏蔽后下一拍攻击边沿的资格不同，首个实质失配定位到 player.cooldown，并最终改变 action/hp。"
+    },
+    "rngState": {
+      "expectDeterministicBreak": true,
+      "expectation": "权威随机游标：屏蔽后回滚区间末端暴击重抽结果不同，首个实质失配定位到 world.rngState（随后是 hp/事件）。"
+    }
+  }
+}
